@@ -1,9 +1,7 @@
 ## The Editor
 
-vals <- ...
+vals <- seq(1, 100)
 
-vals <- seq(...,
-            ...)
 
 ## Vectors
 
