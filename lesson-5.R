@@ -2,25 +2,41 @@
 
 library(dplyr)
 library(...)
-surveys <- read.csv(..., na.strings = "") %>%
+surveys <- read.csv('data/surveys.csv', na.strings = "") %>%
   filter(!is.na(species_id), !is.na(sex), !is.na(weight))
+##filter means are getting rid of any rows that have NAs
 
 ## Constructing layered graphics in ggplot
 
-ggplot(...,
-       ...) +
-  ...
+ggplot(data=surveys,
+       aes(x=species_id, y=weight)) +
+  geom_point()
 
-ggplot(data = surveys,
-       aes(x = species_id, y = weight)) +
-  ...
-  geom_point(...,
-             ...,
-             ...)
+##could also do ggplot(surveys, aes=,,,)
+##will work and automatically map first section to data
+##boxplot
+ggplot(data = surveys, aes(x = species_id, y = weight))+
+  geom_boxplot()+ geom_point(stat = "summary", fun.y= "mean",
+        color="red")
+##tell ggplot to do aggregation and grouping to plot
+#so tell it stat= summary
+##summary statistic fun.y is function on the y axis you
+##want. 
 
 ## Exercise 1
 
-...
+ggplot(data=filter(surveys, species_id=="DM"), 
+       aes(x= year, y=weight))+
+  geom_point(stat="summary",
+             fun.y= "mean")
+##so have to add summary statistics separately from basic aes
+
+##differentiate color males females
+ggplot(data=filter(surveys, species_id=="DM"), 
+       aes(x= year, y=weight, color=sex))+
+  geom_point(stat="summary",
+             fun.y= "mean")
+## so when do color by aes in aesthetic already knows which data
 
 ## Adding a regression line
 
