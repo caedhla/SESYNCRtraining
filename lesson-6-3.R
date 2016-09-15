@@ -11,9 +11,13 @@ in1 <- selectInput("pick_species",
                    label = "Pick a species",
                    choices = unique(species[["species_id"]]))
 out2 <- plotOutput("species_plot")
+side <- sidebarPanel("Options", in1)
+main <- mainPanel(out3, out2)
 out3<-  textOutput("species_name")
-tab <- tabPanel("Species", in1, out2, out3)
-ui <- navbarPage(title = "Portal Project", tab)
+out4 <- dataTableOutput("species_plot_data")
+tab <- tabPanel("Species", sidebarLayout(side, main))
+tab2 <- tabPanel("Data", out4)
+ui <- navbarPage(title = "Portal Project", tab, tab2)
 
 # Server
 server <- function(input, output) {
@@ -29,7 +33,12 @@ server <- function(input, output) {
       select(genus, species) %>%
       paste(collapse=' ')
     )
+  output[["species_plot_data"]] <- renderDataTable(
+    surveys %>%
+      filter(species_id== input[["pick_species"]])
+    )
 }
+## can change order in tab for appearance
 
 # Create the Shiny App
 shinyApp(ui = ui, server = server)
